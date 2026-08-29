@@ -2351,7 +2351,7 @@ async function updateOrderStatus(orderId, newStatus) {
 
   // Hit server first — don't continue if it fails
   try {
-    const res = await fetch(`https://task-api-clean-production.up.railway.app/api/orders/${orderId}`, {
+    const res = await fetch(`https://task-api-clean.onrender.com/api/orders/${orderId}`, {
       method:  "PUT",
       headers: {
         "Content-Type":  "application/json",

@@ -1,0 +1,23 @@
+# Node.js
+node_modules/
+
+# Environment variables / secrets
+.env
+.env.*
+!.env.example
+
+# SSL / private keys
+cert.pem
+key.pem
+*.pem
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/

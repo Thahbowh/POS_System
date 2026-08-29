@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer My Dashboard</title>
+  
+  <link rel="stylesheet" href="customerdash.css">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.js"></script>
+  <style>
+    .nav-icon svg, .mob-icon svg, .stat-icon svg, .tier-icon svg,
+    .welcome-emoji svg, .order-icon svg, .empty-icon svg { width: 1em; height: 1em; stroke: currentColor; }
+    .nav-icon svg, .stat-icon svg { width: 22px; height: 22px; }
+    .tier-icon svg, .welcome-emoji svg, .order-icon svg { width: 28px; height: 28px; }
+    .empty-icon svg { width: 64px; height: 64px; }
+    h4#tierName svg, h2 svg { width: 1em; height: 1em; vertical-align: middle; }
+    .status-badge svg, .toast svg { width: 14px; height: 14px; vertical-align: middle; }
+  </style>
+</head>
+<body>
+
+  <div class="bg-glow"></div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="mark">T</div>
+      <div class="name">POS SYSTEM</div>
+      <div class="sub">LifeStyle Club</div>
+    </div>
+
+    <span class="nav-section-label">My Account</span>
+
+    <a class="nav-item active" onclick="showSection('home', this)">
+      <span class="nav-icon">
+        <i data-lucide="house"></i>
+      </span>
+      Home
+    </a>
+
+    <a class="nav-item" onclick="goToShop(this)">
+      <span class="nav-icon">
+        <i data-lucide="shopping-bag"></i>
+      </span>
+      Shop
+    </a>
+
+    <a class="nav-item" onclick="showSection('orders', this)">
+      <span class="nav-icon">
+        <i data-lucide="shopping-cart"></i>
+      </span>
+        Orders
+      <span class="nav-badge" id="pendingBadge">0</span>
+    </a>
+
+    <a class="nav-item" onclick="showSection('rewards', this)">
+      <span class="nav-icon">
+        <i data-lucide="gift"></i>
+      </span>
+      Rewards
+    </a>
+
+    <span class="nav-section-label">Account</span>
+
+    <a class="nav-item" onclick="showSection('settings', this)">
+      <span class="nav-icon">
+        <i data-lucide="settings"></i>
+      </span>
+      Settings
+    </a>
+
+    <div class="sidebar-footer">
+      <button class="logout-btn" onclick="logout()">
+        <i data-lucide="log-out" style="width:18px;height:18px;"></i>
+        <span>Sign Out</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-left">
+        <h1 id="pageTitle">DASHBOARD</h1>
+        <p id="pageDate"></p>
+      </div>
+      <div class="topbar-right">
+        <div class="avatar-btn" id="avatarBtn">?</div>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- ── HOME ── -->
+      <div class="section active" id="section-home">
+        <div class="welcome-banner">
+          <div>
+            <h2>Welcome back, <span id="welcomeName">Friend</span> <i data-lucide="hand"></i></h2>
+            <p>Here's what's happening with your account today.</p>
+          </div>
+          <div class="welcome-emoji"><i data-lucide="beer"></i></div>
+        </div>
+
+        <div class="stats-grid">
+
+          <!-- Total Orders -->
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i data-lucide="shopping-cart"></i>
+            </div>
+            <div class="stat-value" id="statOrders">0</div>
+            <div class="stat-label">Total Orders</div>
+          </div>
+
+          <!-- Pending -->
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i data-lucide="clock"></i>
+            </div>
+            <div class="stat-value" id="statPending">0</div>
+            <div class="stat-label">Pending</div>
+         </div>
+
+          <!-- Total Spent -->
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i data-lucide="credit-card"></i>
+            </div>
+            <div class="stat-value" id="statSpent">R0</div>
+            <div class="stat-label">Total Spent</div>
+          </div>
+
+          <!-- Points -->
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i data-lucide="star" style="color:#FFB800;"></i>
+            </div>
+            <div class="stat-value" id="statPoints">0</div>
+            <div class="stat-label">Points</div>
+          </div>
+
+        </div>
+
+        <div class="section-header">
+          <h3>Recent Orders</h3>
+          <button class="see-all" onclick="showSection('orders', document.querySelector('[onclick*=\'orders\']'))">See all →</button>
+        </div>
+        <div class="orders-list" id="homeOrdersList"></div>
+      </div>
+
+      <!-- ── ORDERS ── -->
+      <div class="section" id="section-orders">
+        <div class="section-header" style="margin-bottom:20px;">
+          <h3>My Orders</h3>
+        </div>
+        <div class="orders-list" id="fullOrdersList"></div>
+      </div>
+
+      <!-- ── REWARDS ── -->
+      <div class="section" id="section-rewards">
+        <div class="section-header" style="margin-bottom:20px;">
+          <h3>Loyalty & Rewards</h3>
+        </div>
+        <div class="rewards-card">
+          <div class="points-display">
+            <div class="points-circle" id="pointsCircle">
+              <div class="points-inner">
+                <span class="points-num" id="pointsNum">0</span>
+                <span class="points-label">pts</span>
+              </div>
+            </div>
+            <div class="points-info">
+              <h4 id="tierName">Bronze Member <i data-lucide="medal"></i></h4>
+              <p id="tierDesc">Earn 1 point per R10 spent</p>
+              <p style="margin-top:6px;font-size:12px;" id="nextTierMsg"></p>
+            </div>
+          </div>
+
+          <div class="progress-bar-wrap">
+            <div class="progress-label">
+              <span>Progress to next tier</span>
+              <span id="progressPct">0%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" id="progressFill" style="width:0%"></div>
+            </div>
+          </div>
+
+          <div class="reward-tiers">
+            <div class="tier unlocked">
+              <div class="tier-icon"><i data-lucide="medal"></i></div>
+              <div class="tier-name">Bronze</div>
+              <div class="tier-pts">0 pts</div>
+            </div>
+            <div class="tier" id="silverTier">
+              <div class="tier-icon"><i data-lucide="award"></i></div>
+              <div class="tier-name">Silver</div>
+              <div class="tier-pts">100 pts</div>
+            </div>
+            <div class="tier" id="goldTier">
+              <div class="tier-icon"><i data-lucide="trophy"></i></div>
+              <div class="tier-name">Gold VIP</div>
+              <div class="tier-pts">300 pts</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="rewards-card">
+          <div class="section-header">
+            <h3>Available Perks</h3>
+          </div>
+          <div id="perksGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:12px;"></div>
+        </div>
+      </div>
+
+      <!-- ── SETTINGS ── -->
+      <div class="section" id="section-settings">
+        <div class="section-header" style="margin-bottom:20px;">
+          <h3>Account Settings</h3>
+        </div>
+        <div class="settings-card">
+          <h4>Profile Info</h4>
+          <input class="input-field" type="text" id="settingName" placeholder="Full Name">
+          <input class="input-field" type="email" id="settingEmail" placeholder="Email" readonly style="opacity:0.5;">
+          <button class="btn-save" onclick="saveProfile()">Save Changes</button>
+        </div>
+        <div class="settings-card">
+          <h4>Change Password</h4>
+          <input class="input-field" type="password" id="currentPw" placeholder="Current Password">
+          <input class="input-field" type="password" id="newPw" placeholder="New Password">
+          <input class="input-field" type="password" id="confirmPw" placeholder="Confirm New Password">
+          <button class="btn-save" onclick="changePassword()">Update Password</button>
+        </div>
+        <div class="settings-card">
+          <h4>Account</h4>
+          <div class="setting-row">
+            <span class="setting-label">Member since</span>
+            <span class="setting-value" id="memberSince">—</span>
+          </div>
+          <div class="setting-row">
+            <span class="setting-label">Account type</span>
+            <span class="setting-value">Customer</span>
+          </div>
+          <div class="setting-row" style="border:none;">
+            <span class="setting-label" style="color:var(--danger);">Sign out of all devices</span>
+            <button onclick="logout()" style="background:none;border:1px solid var(--danger);color:var(--danger);padding:6px 14px;border-radius:8px;cursor:pointer;font-size:12px;">Logout</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Mobile Nav -->
+  <nav class="mobile-nav">
+
+    <button class="mob-btn" onclick="goToShop(this)">
+      <span class="mob-icon">
+        <i data-lucide="shopping-bag" style="width:22px;height:22px;"></i>
+      </span>
+      Shop
+    </button>
+
+    <button class="mob-btn" onclick="showSection('orders', this)">
+      <span class="mob-icon">
+        <i data-lucide="shopping-cart" style="width:22px;height:22px;"></i>
+      </span>
+      Orders
+    </button>
+
+    <button class="mob-btn active" onclick="showSection('home', this)">
+      <span class="mob-icon">
+        <i data-lucide="house" style="width:22px;height:22px;"></i>
+      </span>
+      Home
+    </button>
+
+    <button class="mob-btn" onclick="showSection('rewards', this)">
+      <span class="mob-icon">
+        <i data-lucide="gift" style="width:22px;height:22px;"></i>
+      </span>
+      Rewards
+    </button>
+
+    <button class="mob-btn" onclick="showSection('settings', this)">
+      <span class="mob-icon">
+        <i data-lucide="settings" style="width:22px;height:22px;"></i>
+      </span>
+      Settings
+    </button>
+
+  </nav>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const API_BASE = "https://task-api-clean-production.up.railway.app";
+
+    // ── Auth Guard
+    const user = JSON.parse(localStorage.getItem("user") || "null");
+    if (!user) { window.location.replace("customer-login.html"); }
+
+    // ── Boot
+    document.addEventListener("DOMContentLoaded", () => {
+      initDashboard();
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    });
+
+    function initDashboard() {
+      const name = user.name || "user";
+      const initials = name.split(" ").map(w => w[0]).join("").toUpperCase().slice(0,2);
+
+      document.getElementById("welcomeName").textContent   = name.split(" ")[0];
+      document.getElementById("avatarBtn").textContent     = initials;
+      document.getElementById("settingName").value         = name;
+      document.getElementById("settingEmail").value        = user.email || "";
+      document.getElementById("memberSince").textContent   = user.createdAt
+        ? new Date(user.createdAt).toLocaleDateString("en-ZA")
+        : "—";
+
+      document.getElementById("pageDate").textContent =
+        new Date().toLocaleDateString("en-ZA", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+
+      loadOrders();
+      loadRewards();
+    }
+
+    // ── Navigation
+    function showSection(id, el) {
+      document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+      document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
+      document.querySelectorAll(".mob-btn").forEach(b => b.classList.remove("active"));
+
+      document.getElementById("section-" + id).classList.add("active");
+      if (el) el.classList.add("active");
+
+      const titles = { home: "DASHBOARD", orders: "MY ORDERS", rewards: "REWARDS", settings: "SETTINGS" };
+      document.getElementById("pageTitle").textContent = titles[id] || id.toUpperCase();
+    }
+
+    // ── Load Orders from API
+    async function loadOrders() {
+      const token = localStorage.getItem("token");
+      let myOrders = [];
+
+      try {
+        const res = await fetch(`${API_BASE}/api/orders/my-orders`, {
+          headers: { "Authorization": `Bearer ${token}` },
+          credentials: "include"
+        });
+        if (res.ok) {
+          myOrders = await res.json();
+        } else {
+          console.warn("Could not load orders:", res.status);
+        }
+      } catch (err) {
+        console.error("Orders fetch failed:", err);
+      }
+
+      const pending  = myOrders.filter(o => o.status === "pending").length;
+      const spent    = myOrders.filter(o => o.status !== "cancelled")
+                               .reduce((s, o) => s + (o.total || 0), 0);
+      const points   = Math.floor(spent / 10);
+
+      document.getElementById("statOrders").textContent  = myOrders.length;
+      document.getElementById("statPending").textContent = pending;
+      document.getElementById("statSpent").textContent   = "R" + spent.toFixed(0);
+      document.getElementById("statPoints").textContent  = points;
+      document.getElementById("pendingBadge").textContent = pending;
+      if (pending === 0) document.getElementById("pendingBadge").style.display = "none";
+
+      renderOrdersList(myOrders.slice(0,3), "homeOrdersList");
+      renderOrdersList(myOrders, "fullOrdersList");
+
+      return { points, spent, myOrders };
+    }
+
+    function renderOrdersList(orders, containerId) {
+      const el = document.getElementById(containerId);
+      if (!orders.length) {
+        el.innerHTML = `<div class="empty-state">
+        <div class="empty-icon">
+          <i data-lucide="shopping-bag" style="width:64px;height:64px;"></i>
+        </div>
+
+  <p>No orders yet. <a href="index.html">Browse the menu →</a></p>
+</div>`;
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+        return;
+      }
+
+      el.innerHTML = orders.map(o => {
+        const items  = o.items.map(i => `${i.name} ×${i.qty}`).join(", ");
+        const status = o.status || "pending";
+        const scls   = { pending: "status-pending", completed: "status-completed", cancelled: "status-cancelled" }[status] || "status-pending";
+        const icon   = { pending: '<i data-lucide="hourglass"></i>', completed: '<i data-lucide="check-circle"></i>', cancelled: '<i data-lucide="x"></i>' }[status] || '<i data-lucide="hourglass"></i>';
+        const time   = o.time ? timeAgo(o.time) : "";
+
+        return `<div class="order-card">
+          <div class="order-icon"><i data-lucide="beer"></i></div>
+          <div class="order-details">
+            <div class="order-id">${o.id || "—"}</div>
+            <div class="order-items">${items}</div>
+            <div class="order-time">${time}</div>
+          </div>
+          <div class="order-right">
+            <div class="order-total">R${(o.total || 0).toFixed(0)}</div>
+            <span class="status-badge ${scls}">${icon} ${capitalize(status)}</span>
+          </div>
+        </div>`;
+      }).join("");
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    // ── Rewards
+    async function loadRewards() {
+      const token = localStorage.getItem("token");
+      let myOrders = [];
+
+      try {
+        const res = await fetch(`${API_BASE}/api/orders/my-orders`, {
+          headers: { "Authorization": `Bearer ${token}` },
+          credentials: "include"
+        });
+        if (res.ok) myOrders = await res.json();
+      } catch (_) {}
+
+      const spent  = myOrders.filter(o => o.status !== "cancelled")
+                             .reduce((s, o) => s + (o.total || 0), 0);
+      const points = Math.floor(spent / 10);
+
+      document.getElementById("pointsNum").textContent  = points;
+      document.getElementById("statPoints").textContent = points;
+
+      // Tier logic
+      let tier = 'Bronze <i data-lucide="medal"></i>', tierDesc = "Earn 1 point per R10 spent", nextMsg = "", pct = 0;
+      if (points >= 300) {
+        tier = 'Gold VIP <i data-lucide="trophy"></i>'; tierDesc = "15% discount on all orders + free drink on birthday";
+        nextMsg = 'You\'ve reached the top tier! <i data-lucide="flame"></i>'; pct = 100;
+        document.getElementById("goldTier").classList.add("unlocked");
+        document.getElementById("silverTier").classList.add("unlocked");
+      } else if (points >= 100) {
+        tier = 'Silver <i data-lucide="award"></i>'; tierDesc = "10% discount on orders over R200";
+        nextMsg = `${300 - points} pts to Gold VIP`; pct = ((points - 100) / 200) * 100;
+        document.getElementById("silverTier").classList.add("unlocked");
+      } else {
+        nextMsg = `${100 - points} pts to Silver`; pct = (points / 100) * 100;
+      }
+
+      document.getElementById("tierName").innerHTML       = tier;
+      document.getElementById("tierDesc").textContent    = tierDesc;
+      document.getElementById("nextTierMsg").innerHTML    = nextMsg;
+      document.getElementById("progressPct").textContent = Math.round(pct) + "%";
+      document.getElementById("progressFill").style.width = Math.min(pct, 100) + "%";
+
+      // Points circle arc
+      const deg = Math.min(pct, 100) * 3.6;
+      document.getElementById("pointsCircle").style.background =
+        `conic-gradient(var(--gold) ${deg}deg, var(--surface2) ${deg}deg)`;
+
+      // Perks
+      const perks = [
+        { icon: '<i data-lucide="gift" style="width:22px;height:22px;color:#FFB800;"></i>',
+         label: "Buy 5 Get 1 Free",
+         pts: 50,
+         unlocked: points >= 50
+        },
+
+        {icon: '<i data-lucide="cake" style="width:22px;height:22px;color:#FFB800;"></i>',
+         label: "Birthday Free Drink",
+         pts: 100,
+         unlocked: points >= 100 
+        },
+        
+        { icon: '<i data-lucide="percent" style="width:22px;height:22px;color:#FFB800;"></i>',
+         label: "10% Off Next Order",
+         pts: 150,
+         unlocked: points >= 150
+         },
+        
+        { icon: '<i data-lucide="crown" style="width:22px;height:22px;color:#FFB800;"></i>',
+         label: "VIP Table Access",
+         pts: 200,
+         unlocked: points >= 200
+        },
+        
+        {icon: '<i data-lucide="martini" style="width:25px;height:25px;color:#FFB800;"></i>',
+         label: "Free Premium Shot",
+         pts: 250,
+         unlocked: points >= 250
+        },
+        
+        
+        { icon: '<i data-lucide="star" style="width:22px;height:22px;color:#FFB800;"></i>',
+        label: "Gold VIP Status",
+        pts: 300,
+        unlocked: points >= 300
+        }
+        
+      ];
+      document.getElementById("perksGrid").innerHTML = perks.map(p => `
+        <div style="background:var(--surface2);border:1px solid ${p.unlocked ? "rgba(255,184,0,0.3)" : "var(--border)"};border-radius:12px;padding:16px;text-align:center;${p.unlocked ? "" : "opacity:0.4;"}">
+          <div style="font-size:24px;margin-bottom:8px;">${p.icon}</div>
+          <div style="font-size:13px;font-weight:500;margin-bottom:4px;">${p.label}</div>
+          
+          <div style="font-size:11px;color:var(--muted2); display:flex; align-items:center; gap:6px;">
+            ${p.pts} pts
+            ${p.unlocked ? `
+            <i data-lucide="check" style="width:14px;height:14px;color:#00C853;"></i>` : `
+
+            <i data-lucide="lock" style="width:14px;height:14px;color:#FFB800;"></i>`}
+          </div>
+
+        </div>
+      `).join("");
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    // ── Settings
+   async function saveProfile() {
+      const name = document.getElementById("settingName").value.trim();
+      if (!name) { showToast("Name cannot be empty", "gold"); return; }
+
+      const token = localStorage.getItem("token");
+
+      try {
+        const res = await fetch(`${API_BASE}/users/update-profile`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          },
+          credentials: "include",
+          body: JSON.stringify({ name })
+        });
+
+        if (!res.ok) {
+          const err = await res.json();
+          showToast(err.message || "Update failed", "gold");
+          return;
+        }
+
+        // Update localStorage so the name persists on refresh
+        user.name = name;
+        localStorage.setItem("user", JSON.stringify(user));
+
+        // Update UI
+        document.getElementById("welcomeName").textContent = name.split(" ")[0];
+        document.getElementById("avatarBtn").textContent   = name.split(" ").map(w => w[0]).join("").toUpperCase().slice(0, 2);
+        showToast('Profile updated <i data-lucide="check"></i>', "green");
+
+      } catch (err) {
+       console.error("Profile update failed:", err);
+       showToast("Network error. Try again.", "gold");
+      }
+    }
+
+    function changePassword() {
+      const cur  = document.getElementById("currentPw").value;
+      const nw   = document.getElementById("newPw").value;
+      const conf = document.getElementById("confirmPw").value;
+      if (!cur || !nw || !conf) { showToast("Please fill all fields", "gold"); return; }
+      if (nw !== conf) { showToast("Passwords don't match", "gold"); return; }
+      if (nw.length < 6) { showToast("Password must be 6+ characters", "gold"); return; }
+      // TODO: POST /auth/change-password
+      showToast('Password changed <i data-lucide="check"></i>', "green");
+      document.getElementById("currentPw").value = "";
+      document.getElementById("newPw").value = "";
+      document.getElementById("confirmPw").value = "";
+    }
+
+    // ── Logout
+    function logout() {
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
+      window.location.href = "customer-login.html";
+    }
+
+    // ── Helpers
+    function timeAgo(dateStr) {
+      const diff = (Date.now() - new Date(dateStr)) / 1000;
+      if (diff < 60)    return "Just now";
+      if (diff < 3600)  return Math.floor(diff / 60) + " min ago";
+      if (diff < 86400) return Math.floor(diff / 3600) + "h ago";
+      return new Date(dateStr).toLocaleDateString("en-ZA");
+    }
+
+    function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+
+    function showToast(msg, type = "gold") {
+      const t = document.getElementById("toast");
+      t.innerHTML = msg;
+      t.className = "toast " + type + " show";
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+      setTimeout(() => t.className = "toast", 3000);
+    }
+
+    //Go to shop page
+function goToShop(el) {
+
+  // Remove active class from all nav items
+  document.querySelectorAll(".nav-item")
+    .forEach(n => n.classList.remove("active"));
+
+  // Remove active class from mobile buttons
+  document.querySelectorAll(".mob-btn")
+    .forEach(b => b.classList.remove("active"));
+
+  // Add active class to clicked button
+  el.classList.add("active");
+
+  // Navigate to another page
+  window.location.href = "index.html";
+
+}
+  </script>
+</body>
+</html>

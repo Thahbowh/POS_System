@@ -19,7 +19,7 @@ app.use(cors({
     "http://127.0.0.1:5500",
     "http://192.168.8.152:5000",
     "https://thahbowh.github.io",
-    "https://task-api-clean.onrender.com"
+    "https://gregarious-llama-c3f1d1.netlify.app"
   ],
   credentials: true
 }));

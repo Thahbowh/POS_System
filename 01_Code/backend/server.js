@@ -19,7 +19,7 @@ app.use(cors({
     "http://127.0.0.1:5500",
     "http://192.168.8.152:5000",
     "https://thahbowh.github.io",
-    "https://pos-frontend-production-ab6d.up.railway.app"
+    "https://task-api-clean.onrender.com"
   ],
   credentials: true
 }));

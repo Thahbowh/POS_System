@@ -3,8 +3,8 @@
 // ═══════════════════════════════════════════════════════
 console.log("index.js loaded");
 
-const API_BASE = "https://task-api-clean-production.up.railway.app";
-
+const API_BASE = "https://task-api-clean.onrender.com";
+h
 let allProducts = [];
 let cart        = [];          // ← single declaration
 

@@ -702,6 +702,7 @@ function showOrderMessage(msg, type) {
 
 // ─── Place Order ───────────────────────────────────────
 async function placeOrder(paymentMethod = "cash") {
+  console.log("💳 Payment method received:", paymentMethod);
   if (!cart || cart.length === 0) { alert("Your cart is empty!"); return; }
 
   const user    = JSON.parse(localStorage.getItem("user") || "{}");

@@ -8,6 +8,24 @@ const API_BASE = "https://task-api-clean.onrender.com";
 let allProducts = [];
 let cart        = [];          // ← single declaration
 
+// ── Payment Modal ──────────────────────────
+function openPaymentModal() {
+  if (!cart || cart.length === 0) {
+    alert("Your cart is empty!");
+    return;
+  }
+  document.getElementById("paymentModal").style.display = "flex";
+}
+
+function closePaymentModal() {
+  document.getElementById("paymentModal").style.display = "none";
+}
+
+async function confirmPayment(method) {
+  closePaymentModal();
+  await placeOrder(method);   // pass method into placeOrder
+}
+
 // ─── Age Verification ──────────────────────────────────
 function verifyAge(isAdult) {
   const modal = document.getElementById('ageModal');
@@ -683,7 +701,7 @@ function showOrderMessage(msg, type) {
 }
 
 // ─── Place Order ───────────────────────────────────────
-async function placeOrder() {
+async function placeOrder(paymentMethod = "cash") {
   if (!cart || cart.length === 0) { alert("Your cart is empty!"); return; }
 
   const user    = JSON.parse(localStorage.getItem("user") || "{}");
@@ -698,7 +716,7 @@ async function placeOrder() {
     total:    total,
     time:     new Date().toISOString(),
     status:   "pending",
-    payment:  "cash"
+    payment:  paymentMethod
   };
 
   // 1 — Save to localStorage (admin dashboard reads this)

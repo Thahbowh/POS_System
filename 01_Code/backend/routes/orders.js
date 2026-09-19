@@ -54,11 +54,8 @@ router.post('/', async (req, res) => {
   // from the customer-facing ordering flow, so it's always "online"
   // regardless of what the client tried to send. Staff orders use
   // whichever method (cash/card) the staff member selected.
-  const allowedPayments = ['cash', 'card', 'online'];
-  let paymentMethod;
-  // Use whatever the customer selected — fall back to 'cash' if invalid
-const allowedPayments = ['cash', 'card', 'online'];
-const paymentMethod = allowedPayments.includes(payment) ? payment : 'cash';
+ const allowedPayments = ['cash', 'card', 'online'];
+ const paymentMethod   = allowedPayments.includes(payment) ? payment : 'cash';
 
   // ── STEP 1: Check every item has enough stock before saving anything ──
   for (const item of items) {

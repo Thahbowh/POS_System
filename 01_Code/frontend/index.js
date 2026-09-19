@@ -3,7 +3,7 @@
 // ═══════════════════════════════════════════════════════
 console.log("index.js loaded");
 
-const API_BASE = "https://task-api-clean.onrender.com";
+const API_BASE = "http://localhost:5000";
 
 let allProducts = [];
 let cart        = [];          // ← single declaration

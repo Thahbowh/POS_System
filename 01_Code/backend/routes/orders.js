@@ -56,11 +56,9 @@ router.post('/', async (req, res) => {
   // whichever method (cash/card) the staff member selected.
   const allowedPayments = ['cash', 'card', 'online'];
   let paymentMethod;
-  if (!staffId) {
-    paymentMethod = 'online';
-  } else {
-    paymentMethod = allowedPayments.includes(payment) ? payment : 'cash';
-  }
+  // Use whatever the customer selected — fall back to 'cash' if invalid
+const allowedPayments = ['cash', 'card', 'online'];
+const paymentMethod = allowedPayments.includes(payment) ? payment : 'cash';
 
   // ── STEP 1: Check every item has enough stock before saving anything ──
   for (const item of items) {

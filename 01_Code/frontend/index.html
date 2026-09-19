@@ -8,7 +8,130 @@
 
 </head>
 <body>
+<!-- ── Payment Method Modal ── -->
+<div id="paymentModal" style="
+  display:none; position:fixed; inset:0; z-index:9999;
+  background:rgba(0,0,0,0.88); backdrop-filter:blur(8px);
+  align-items:center; justify-content:center;
+">
+  <div style="
+    background:#0f0f0f; border:1px solid #2a2a2a; border-radius:20px;
+    width:90%; max-width:420px; overflow:hidden;
+    box-shadow:0 0 80px rgba(255,184,0,0.1);
+    animation:payIn 0.4s cubic-bezier(0.16,1,0.3,1) both;
+  ">
 
+    <!-- Header -->
+    <div style="
+      padding:24px 28px 20px;
+      border-bottom:1px solid #1a1a1a;
+    ">
+      <div style="font-size:11px;letter-spacing:0.12em;color:#555;margin-bottom:6px;">RISE N SHINE LIFESTYLE</div>
+      <div style="font-size:20px;font-weight:800;color:#fff;">How would you like to pay?</div>
+      <div style="font-size:13px;color:#555;margin-top:4px;">Choose your payment method below</div>
+    </div>
+
+    <!-- Options -->
+    <div style="padding:20px 28px; display:flex; flex-direction:column; gap:12px;">
+
+      <!-- Cash at Till -->
+      <button onclick="confirmPayment('cash')" style="
+        display:flex; align-items:center; gap:16px;
+        background:#161616; border:1px solid #2a2a2a;
+        border-radius:14px; padding:16px 20px;
+        cursor:pointer; text-align:left; width:100%;
+        transition:border-color 0.2s;
+      "
+      onmouseover="this.style.borderColor='#FFB800'"
+      onmouseout="this.style.borderColor='#2a2a2a'">
+        <div style="
+          width:46px; height:46px; border-radius:12px; flex-shrink:0;
+          background:#1a1a00; border:1px solid #333;
+          display:flex; align-items:center; justify-content:center;
+          font-size:22px;
+        ">💵</div>
+        <div>
+          <div style="font-size:15px;font-weight:700;color:#fff;margin-bottom:3px;">Cash at Till</div>
+          <div style="font-size:12px;color:#555;line-height:1.4;">Pay with cash when you collect your order at the counter</div>
+        </div>
+        <div style="margin-left:auto;color:#333;font-size:18px;">›</div>
+      </button>
+
+      <!-- Card at Till -->
+      <button onclick="confirmPayment('card')" style="
+        display:flex; align-items:center; gap:16px;
+        background:#161616; border:1px solid #2a2a2a;
+        border-radius:14px; padding:16px 20px;
+        cursor:pointer; text-align:left; width:100%;
+        transition:border-color 0.2s;
+      "
+      onmouseover="this.style.borderColor='#FFB800'"
+      onmouseout="this.style.borderColor='#2a2a2a'">
+        <div style="
+          width:46px; height:46px; border-radius:12px; flex-shrink:0;
+          background:#001a0d; border:1px solid #333;
+          display:flex; align-items:center; justify-content:center;
+          font-size:22px;
+        ">💳</div>
+        <div>
+          <div style="font-size:15px;font-weight:700;color:#fff;margin-bottom:3px;">Card at Till</div>
+          <div style="font-size:12px;color:#555;line-height:1.4;">Tap or swipe your card when you collect at the counter</div>
+        </div>
+        <div style="margin-left:auto;color:#333;font-size:18px;">›</div>
+      </button>
+
+      <!-- Pay Online -->
+      <button onclick="confirmPayment('online')" style="
+        display:flex; align-items:center; gap:16px;
+        background:linear-gradient(135deg,rgba(255,184,0,0.06),rgba(255,107,0,0.04));
+        border:1px solid rgba(255,184,0,0.25);
+        border-radius:14px; padding:16px 20px;
+        cursor:pointer; text-align:left; width:100%;
+        transition:border-color 0.2s, background 0.2s;
+      "
+      onmouseover="this.style.borderColor='#FFB800'"
+      onmouseout="this.style.borderColor='rgba(255,184,0,0.25)'">
+        <div style="
+          width:46px; height:46px; border-radius:12px; flex-shrink:0;
+          background:rgba(255,184,0,0.1); border:1px solid rgba(255,184,0,0.3);
+          display:flex; align-items:center; justify-content:center;
+          font-size:22px;
+        ">📱</div>
+        <div>
+          <div style="font-size:15px;font-weight:700;color:#FFB800;margin-bottom:3px;">Pay Online</div>
+          <div style="font-size:12px;color:#555;line-height:1.4;">Use your banking app — SnapScan, Ozow, EFT or instant payment</div>
+        </div>
+        <div style="margin-left:auto;color:#FFB800;font-size:18px;">›</div>
+      </button>
+
+    </div>
+
+    <!-- Footer -->
+    <div style="padding:0 28px 24px;">
+      <button onclick="closePaymentModal()" style="
+        width:100%; padding:13px;
+        background:transparent; border:1px solid #222;
+        border-radius:12px; color:#555;
+        font-size:13px; cursor:pointer;
+        transition:border-color 0.2s, color 0.2s;
+      "
+      onmouseover="this.style.borderColor='#444';this.style.color='#aaa'"
+      onmouseout="this.style.borderColor='#222';this.style.color='#555'">
+        Cancel — go back to cart
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<style>
+  @keyframes payIn {
+    from { opacity:0; transform:scale(0.92) translateY(24px); }
+    to   { opacity:1; transform:scale(1)    translateY(0); }
+  }
+</style>
+
+  
    <!-- Age Modal -->
   <div id="ageModal">
     <div class="age-box">
@@ -162,7 +285,7 @@
       <h3>Total: R<span id="total">0</span></h3>
     </div>
 
-    <button class="order-btn" onclick="placeOrder()">Place Order</button>
+    <button class="order-btn" onclick="openPaymentModal()">Place Order</button>
   </div>
 
   <div id="receiptModal" class="receipt-modal">

@@ -8,6 +8,127 @@
 
 </head>
 <body>
+
+
+  <!-- ── Order Confirmed Waiting Modal ── -->
+<div id="orderWaitModal" style="
+  display:none; position:fixed; inset:0; z-index:99999;
+  background:#080808;
+  align-items:center; justify-content:center;
+  font-family:'DM Sans',sans-serif;
+">
+  <div style="
+    width:90%; max-width:400px;
+    text-align:center;
+    animation:waitIn 0.5s cubic-bezier(0.16,1,0.3,1) both;
+  ">
+
+    <!-- Pulsing ring -->
+    <div style="position:relative;width:90px;height:90px;margin:0 auto 28px;" id="waitRing">
+      <div style="
+        position:absolute;inset:0;border-radius:50%;
+        border:2px solid rgba(255,184,0,0.15);
+        animation:ringPulse 2s ease-in-out infinite;
+      "></div>
+      <div style="
+        position:absolute;inset:8px;border-radius:50%;
+        border:2px solid rgba(255,184,0,0.3);
+        animation:ringPulse 2s ease-in-out infinite 0.3s;
+      "></div>
+      <div style="
+        position:absolute;inset:16px;border-radius:50%;
+        background:linear-gradient(135deg,#FFB800,#ff6b00);
+        display:flex;align-items:center;justify-content:center;
+        font-size:24px;
+      ">🍺</div>
+    </div>
+
+    <!-- Order confirmed -->
+    <div style="
+      font-size:11px;letter-spacing:0.14em;
+      color:#FFB800;margin-bottom:10px;
+    ">ORDER CONFIRMED</div>
+
+    <div style="
+      font-size:28px;font-weight:800;
+      color:#fff;line-height:1.15;margin-bottom:8px;
+    ">We're getting<br>your order ready</div>
+
+    <div style="
+      font-size:13px;color:#555;
+      line-height:1.6;margin-bottom:24px;
+      max-width:280px;margin-left:auto;margin-right:auto;
+    ">
+      Stay on this screen — we'll let you know the moment it's ready to collect.
+    </div>
+
+    <!-- Order number pill -->
+    <div style="
+      display:inline-block;
+      background:#111;border:1px solid #2a2a2a;
+      border-radius:10px;padding:14px 28px;
+      margin-bottom:28px;
+    ">
+      <div style="font-size:11px;color:#555;margin-bottom:5px;letter-spacing:0.08em;">YOUR ORDER NUMBER</div>
+      <div style="
+        font-size:26px;font-weight:800;
+        color:#FFB800;letter-spacing:3px;
+      " id="waitOrderId">—</div>
+    </div>
+
+    <!-- Screenshot reminder -->
+    <div style="
+      display:flex;align-items:center;gap:8px;
+      background:#111;border:1px solid #1e1e1e;
+      border-radius:10px;padding:12px 16px;
+      margin-bottom:24px;text-align:left;
+    ">
+      <span style="font-size:20px;flex-shrink:0;">📸</span>
+      <span style="font-size:12px;color:#666;line-height:1.5;">
+        Screenshot your order number in case you need it at the till.
+      </span>
+    </div>
+
+    <!-- Progress bar -->
+    <div style="margin-bottom:8px;">
+      <div style="
+        display:flex;justify-content:space-between;
+        font-size:11px;color:#444;margin-bottom:8px;
+      ">
+        <span>Preparing your order</span>
+        <span id="waitTimeLeft">6:00</span>
+      </div>
+       <div style="
+         background:#111;border-radius:999px;
+         height:4px;overflow:hidden;
+       ">
+         <div id="waitProgressBar" style="
+           height:100%;width:0%;
+           background:linear-gradient(90deg,#FFB800,#ff6b00);
+           border-radius:999px;
+           transition:width 1s linear;
+         "></div>
+       </div>
+     </div>
+
+     <div style="font-size:11px;color:#333;margin-top:12px;">
+       This screen stays open until your order is called
+     </div>
+
+   </div>
+ </div>
+
+ <style>
+   @keyframes waitIn {
+     from { opacity:0; transform:scale(0.95) translateY(16px); }
+     to   { opacity:1; transform:scale(1)    translateY(0); }
+   }
+   @keyframes ringPulse {
+     0%,100% { transform:scale(1);   opacity:1; }
+     50%      { transform:scale(1.08);opacity:0.5; }
+   }
+ </style>
+  
   
 <!-- ── Payment Method Modal ── -->
   <div id="paymentModal" style="

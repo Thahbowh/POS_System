@@ -617,6 +617,7 @@ let collectPollInterval = null;
 
 // REPLACE showCollectSlip with:
 function showCollectSlip(order) {
+  closeWaitModal();
   document.getElementById("slipOrderId").textContent = order.id;
   document.getElementById("slipTotal").textContent   = "R" + parseFloat(order.total).toFixed(2);
   document.getElementById("slipItems").innerHTML     = (order.items || [])
@@ -700,6 +701,85 @@ function showOrderMessage(msg, type) {
   setTimeout(() => { if (toast.parentNode) toast.remove(); }, 4000);
 }
 
+// ── Order Waiting Modal ────────────────────────────────
+let waitInterval   = null;
+let waitTotal      = 6 * 60; // 6 minutes in seconds
+let waitElapsed    = 0;
+let wakeLock       = null;
+
+async function openWaitModal(orderId) {
+  waitElapsed = 0;
+  document.getElementById("waitOrderId").textContent  = orderId;
+  document.getElementById("waitProgressBar").style.width = "0%";
+  document.getElementById("waitTimeLeft").textContent = "6:00";
+  document.getElementById("orderWaitModal").style.display = "flex";
+
+  // Try to keep screen awake (mobile)
+  try {
+    if ("wakeLock" in navigator) {
+      wakeLock = await navigator.wakeLock.request("screen");
+    }
+  } catch (_) {}
+
+  // Start progress timer
+  if (waitInterval) clearInterval(waitInterval);
+  waitInterval = setInterval(() => {
+    waitElapsed++;
+    const pct  = Math.min((waitElapsed / waitTotal) * 100, 100);
+    const left = Math.max(waitTotal - waitElapsed, 0);
+    const mins = Math.floor(left / 60);
+    const secs = left % 60;
+
+    document.getElementById("waitProgressBar").style.width = pct + "%";
+    document.getElementById("waitTimeLeft").textContent =
+      `${mins}:${secs.toString().padStart(2, "0")}`;
+
+    if (waitElapsed >= waitTotal) {
+      clearInterval(waitInterval);
+      document.getElementById("waitTimeLeft").textContent = "Ready soon!";
+    }
+  }, 1000);
+}
+
+function closeWaitModal() {
+  document.getElementById("orderWaitModal").style.display = "none";
+  if (waitInterval) { clearInterval(waitInterval); waitInterval = null; }
+  if (wakeLock)     { wakeLock.release(); wakeLock = null; }
+}
+
+// ── Block back button — ask for screenshot first
+window.addEventListener("popstate", (e) => {
+  const modal = document.getElementById("orderWaitModal");
+  if (modal && modal.style.display === "flex") {
+    // Push state again to re-block
+    history.pushState(null, "", window.location.href);
+    const confirmed = confirm(
+      "⚠️ Have you taken a screenshot of your order number?\n\n" +
+      "You need it to collect your order at the till.\n\n" +
+      "Press Cancel to stay and screenshot, or OK if you already have it."
+    );
+    if (confirmed) {
+      closeWaitModal();
+      history.back();
+    }
+  }
+});
+
+// Push initial state so popstate fires on back button
+history.pushState(null, "", window.location.href);
+
+// ── Keep timer running when tab is hidden (phone lock / tab switch)
+document.addEventListener("visibilitychange", () => {
+  // Timer keeps running — setInterval continues in background
+  // Just re-acquire wake lock when tab comes back
+  if (document.visibilityState === "visible" && wakeLock === null) {
+    const modal = document.getElementById("orderWaitModal");
+    if (modal && modal.style.display === "flex") {
+      navigator.wakeLock?.request("screen").then(l => wakeLock = l).catch(() => {});
+    }
+  }
+});
+
 // ─── Place Order ───────────────────────────────────────
 async function placeOrder(paymentMethod = "cash") {
   console.log("💳 Payment method received:", paymentMethod);
@@ -746,15 +826,9 @@ async function placeOrder(paymentMethod = "cash") {
     return;
   }
 
-  // 3 — Show receipt
-  document.getElementById("orderId").textContent      = "Order ID: " + orderId;
-  document.getElementById("receiptTotal").textContent = total.toFixed(2);
-  document.getElementById("receiptItems").innerHTML   =
-    order.items.map(i =>
-      `<p>${i.name} × ${i.qty} — R${(i.price * i.qty).toFixed(2)}</p>`
-    ).join("");
-  startOrderPolling(order); 
-  document.getElementById("receiptModal").style.display = "flex";
+  // 3 — Show wait modal
+  startOrderPolling(order);
+  openWaitModal(orderId);
 
   // 4 — Clear cart
   cart = [];

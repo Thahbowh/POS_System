@@ -57,81 +57,38 @@
  }
 
  /* SIDEBAR */
- .sidebar {
+.sidebar {
   width: 220px;
-  background: #111;
-  border-right: 1px solid #1e1e1e;
-  display: flex;
-  flex-direction: column;
+  background: #181818;
+  padding: 20px;
   flex-shrink: 0;
   height: 100vh;
-  position: sticky;
-  top: 0;
-  overflow-y: auto;
-  padding: 0 0 24px;
-}
-.sidebar-brand {
-  padding: 18px 16px 14px;
-  border-bottom: 1px solid #1e1e1e;
-  margin-bottom: 6px;
-}
-.sidebar-brand .brand-name {
-  font-size: 13px; font-weight: 700;
-  color: #FFB800; letter-spacing: 0.5px;
-}
-.sidebar-brand .brand-sub {
-  font-size: 11px; color: #333; margin-top: 2px;
-}
-.nav-group { margin-bottom: 2px; }
-.nav-group-label {
-  padding: 10px 16px 4px;
-  font-size: 9px; font-weight: 700;
-  letter-spacing: 0.12em; text-transform: uppercase;
-  color: #2a2a2a;
-}
-.nav-parent {
-  display: flex; align-items: center; gap: 9px;
-  padding: 9px 16px;
-  font-size: 13px; font-weight: 600;
-  color: #555; cursor: pointer;
-  border-left: 2px solid transparent;
-  transition: all 0.15s; user-select: none;
-}
-.nav-parent:hover { color: #ccc; background: rgba(255,255,255,0.02); }
-.nav-parent.open  { color: #ddd; }
-.nav-parent .nav-icon { font-size: 14px; width: 16px; text-align: center; }
-.nav-parent .nav-arrow {
-  margin-left: auto; font-size: 10px; color: #2a2a2a;
-  transition: transform 0.2s;
-}
-.nav-parent.open .nav-arrow { transform: rotate(90deg); color: #555; }
-.nav-children { display: none; flex-direction: column; padding: 2px 0 4px; }
-.nav-children.open { display: flex; }
-.nav-child {
-  display: flex; align-items: center; gap: 7px;
-  padding: 6px 16px 6px 36px;
-  font-size: 12px; color: #444;
+ }
+
+ .sidebar h2 {
+  color: gold;
+  margin-bottom: 20px;
+ }
+
+ .sidebar ul {
+  list-style: none;
+ }
+
+ .sidebar ul li {
+  padding: 12px;
+  margin: 8px 0;
+  background: #222;
   cursor: pointer;
-  border-left: 2px solid transparent;
-  transition: all 0.12s; position: relative;
-}
-.nav-child::before {
-  content: '';
-  position: absolute; left: 24px; top: 50%;
-  width: 5px; height: 1px; background: #222;
-}
-.nav-child:hover { color: #bbb; background: rgba(255,255,255,0.02); }
-.nav-child.active {
-  color: #FFB800;
-  border-left-color: #FFB800;
-  background: rgba(255,184,0,0.04);
-}
-.nav-child.active::before { background: #FFB800; }
-.nav-soon {
-  margin-left: auto; font-size: 9px;
-  background: #1a1a1a; color: #333;
-  padding: 1px 5px; border-radius: 999px;
-}
+  border-radius: 6px;
+ }
+
+ .sidebar ul li:hover,
+ .sidebar ul li.active {
+  background: gold;
+  color: black;
+ }
+
+    
  .sidebar-footer {
   margin-top: auto;
   padding-top: 16px;
@@ -2583,108 +2540,19 @@ button {
  <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
 
  <!-- SIDEBAR -->
-  <<div class="sidebar" id="sidebar">
-  <div class="sidebar-brand">
-    <div class="brand-name">FlowPOS</div>
-    <div class="brand-sub">LifeStyle</div>
-  </div>
-
-  <!-- 🏠 HUB -->
-  <div class="nav-group">
-    <div class="nav-parent open" onclick="toggleNav(this)">
-      <span class="nav-icon">🏠</span> Hub
-      <span class="nav-arrow">›</span>
-    </div>
-    <div class="nav-children open">
-      <div class="nav-child active" onclick="switchTo('dashboard', this)">Dashboard</div>
-      <div class="nav-child"        onclick="switchTo('orders', this)">Orders</div>
-    </div>
-  </div>
-
-  <!-- 💰 SALES -->
-  <div class="nav-group">
-    <div class="nav-parent" onclick="toggleNav(this)">
-      <span class="nav-icon">💰</span> Sales
-      <span class="nav-arrow">›</span>
-    </div>
-    <div class="nav-children">
-      <div class="nav-child" onclick="switchTo('scanner', this); initScanner()">New Sale</div>
-      <div class="nav-child" onclick="switchTo('orders', this)">Sales History</div>
-      <div class="nav-child">Returns <span class="nav-soon">soon</span></div>
-      <div class="nav-child">Receipts <span class="nav-soon">soon</span></div>
-    </div>
-  </div>
-
-  <!-- 📦 PRODUCTS -->
-  <div class="nav-group">
-    <div class="nav-parent" onclick="toggleNav(this)">
-      <span class="nav-icon">📦</span> Products
-      <span class="nav-arrow">›</span>
-    </div>
-    <div class="nav-children">
-      <div class="nav-child" onclick="switchTo('products', this)">Products</div>
-      <div class="nav-child">Stock <span class="nav-soon">soon</span></div>
-    </div>
-  </div>
-
-  <!-- 💵 MONEY -->
-  <div class="nav-group">
-    <div class="nav-parent" onclick="toggleNav(this)">
-      <span class="nav-icon">💵</span> Money
-      <span class="nav-arrow">›</span>
-    </div>
-    <div class="nav-children">
-      <div class="nav-child" onclick="switchTo('expenses', this)">Expenses & Profit</div>
-      <div class="nav-child">Cash Up <span class="nav-soon">soon</span></div>
-      <div class="nav-child">Payments <span class="nav-soon">soon</span></div>
-    </div>
-  </div>
-
-  <!-- 👥 MANAGER -->
-  <div class="nav-group">
-    <div class="nav-parent" onclick="toggleNav(this)">
-      <span class="nav-icon">👥</span> Manager
-      <span class="nav-arrow">›</span>
-    </div>
-    <div class="nav-children">
-      <div class="nav-child" onclick="switchTo('users', this)">Users</div>
-      <div class="nav-child">Staff <span class="nav-soon">soon</span></div>
-      <div class="nav-child">
-        <a href="security.jsx" style="color:inherit;text-decoration:none;">Security</a>
-      </div>
-    </div>
-  </div>
-
-  <!-- 📊 ANALYTICS -->
-  <div class="nav-group">
-    <div class="nav-parent" onclick="toggleNav(this)">
-      <span class="nav-icon">📊</span> Analytics
-      <span class="nav-arrow">›</span>
-    </div>
-    <div class="nav-children">
-      <div class="nav-child" onclick="switchTo('analytics', this)">Overview</div>
-      <div class="nav-child">Performance <span class="nav-soon">soon</span></div>
-    </div>
-  </div>
-
-  <!-- ⚙️ SETTINGS -->
-  <div class="nav-group">
-    <div class="nav-parent" onclick="toggleNav(this)">
-      <span class="nav-icon">⚙️</span> Settings
-      <span class="nav-arrow">›</span>
-    </div>
-    <div class="nav-children">
-      <div class="nav-child" onclick="switchTo('settings', this)">POS Settings</div>
-      <div class="nav-child">Business Profile <span class="nav-soon">soon</span></div>
-    </div>
-  </div>
-
-  <div class="sidebar-footer">
-    <button class="logout-btn" onclick="logout()">
-      <i data-lucide="log-out"></i> Sign out
-    </button>
-  </div>
-</div>
+  <div class="sidebar" id="sidebar">
+    <h2>POS SYSTEM</h2>
+    <ul>
+      <li class="active" onclick="showSection('dashboard', this)">Dashboard</li>
+      <li onclick="showSection('orders', this)">Orders</li>
+      <li onclick="showSection('products', this)">Products</li>
+      <li onclick="showSection('users', this)">Users</li>
+      <li onclick="showSection('analytics', this)">Analytics</li>
+      <li onclick="showSection('expenses', this)">Expenses</li>
+      <li onclick="showSection('scanner', this); initScanner()">Scanner</li>
+      <li><a href="security.jsx">Security</a></li>
+      <li onclick="showSection('settings', this)">Settings</li>
+    </ul>
 
     <div class="sidebar-footer">
       <button class="logout-btn" onclick="logout()"><i data-lucide="log-out"></i> Logout</button>

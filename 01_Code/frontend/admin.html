@@ -2583,19 +2583,108 @@ button {
  <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
 
  <!-- SIDEBAR -->
-  <div class="sidebar" id="sidebar">
-    <h2>FlowPOS</h2>
-    <ul>
-      <li class="active" onclick="showSection('dashboard', this)">Dashboard</li>
-      <li onclick="showSection('orders', this)">Orders</li>
-      <li onclick="showSection('products', this)">Products</li>
-      <li onclick="showSection('users', this)">Users</li>
-      <li onclick="showSection('analytics', this)">Analytics</li>
-      <li onclick="showSection('expenses', this)">Expenses</li>
-      <li onclick="showSection('scanner', this); initScanner()">Scanner</li>
-      <li><a href="security.jsx">Security</a></li>
-      <li onclick="showSection('settings', this)">Settings</li>
-    </ul>
+  <<div class="sidebar" id="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-name">FlowPOS</div>
+    <div class="brand-sub">LifeStyle</div>
+  </div>
+
+  <!-- 🏠 HUB -->
+  <div class="nav-group">
+    <div class="nav-parent open" onclick="toggleNav(this)">
+      <span class="nav-icon">🏠</span> Hub
+      <span class="nav-arrow">›</span>
+    </div>
+    <div class="nav-children open">
+      <div class="nav-child active" onclick="switchTo('dashboard', this)">Dashboard</div>
+      <div class="nav-child"        onclick="switchTo('orders', this)">Orders</div>
+    </div>
+  </div>
+
+  <!-- 💰 SALES -->
+  <div class="nav-group">
+    <div class="nav-parent" onclick="toggleNav(this)">
+      <span class="nav-icon">💰</span> Sales
+      <span class="nav-arrow">›</span>
+    </div>
+    <div class="nav-children">
+      <div class="nav-child" onclick="switchTo('scanner', this); initScanner()">New Sale</div>
+      <div class="nav-child" onclick="switchTo('orders', this)">Sales History</div>
+      <div class="nav-child">Returns <span class="nav-soon">soon</span></div>
+      <div class="nav-child">Receipts <span class="nav-soon">soon</span></div>
+    </div>
+  </div>
+
+  <!-- 📦 PRODUCTS -->
+  <div class="nav-group">
+    <div class="nav-parent" onclick="toggleNav(this)">
+      <span class="nav-icon">📦</span> Products
+      <span class="nav-arrow">›</span>
+    </div>
+    <div class="nav-children">
+      <div class="nav-child" onclick="switchTo('products', this)">Products</div>
+      <div class="nav-child">Stock <span class="nav-soon">soon</span></div>
+    </div>
+  </div>
+
+  <!-- 💵 MONEY -->
+  <div class="nav-group">
+    <div class="nav-parent" onclick="toggleNav(this)">
+      <span class="nav-icon">💵</span> Money
+      <span class="nav-arrow">›</span>
+    </div>
+    <div class="nav-children">
+      <div class="nav-child" onclick="switchTo('expenses', this)">Expenses & Profit</div>
+      <div class="nav-child">Cash Up <span class="nav-soon">soon</span></div>
+      <div class="nav-child">Payments <span class="nav-soon">soon</span></div>
+    </div>
+  </div>
+
+  <!-- 👥 MANAGER -->
+  <div class="nav-group">
+    <div class="nav-parent" onclick="toggleNav(this)">
+      <span class="nav-icon">👥</span> Manager
+      <span class="nav-arrow">›</span>
+    </div>
+    <div class="nav-children">
+      <div class="nav-child" onclick="switchTo('users', this)">Users</div>
+      <div class="nav-child">Staff <span class="nav-soon">soon</span></div>
+      <div class="nav-child">
+        <a href="security.jsx" style="color:inherit;text-decoration:none;">Security</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 📊 ANALYTICS -->
+  <div class="nav-group">
+    <div class="nav-parent" onclick="toggleNav(this)">
+      <span class="nav-icon">📊</span> Analytics
+      <span class="nav-arrow">›</span>
+    </div>
+    <div class="nav-children">
+      <div class="nav-child" onclick="switchTo('analytics', this)">Overview</div>
+      <div class="nav-child">Performance <span class="nav-soon">soon</span></div>
+    </div>
+  </div>
+
+  <!-- ⚙️ SETTINGS -->
+  <div class="nav-group">
+    <div class="nav-parent" onclick="toggleNav(this)">
+      <span class="nav-icon">⚙️</span> Settings
+      <span class="nav-arrow">›</span>
+    </div>
+    <div class="nav-children">
+      <div class="nav-child" onclick="switchTo('settings', this)">POS Settings</div>
+      <div class="nav-child">Business Profile <span class="nav-soon">soon</span></div>
+    </div>
+  </div>
+
+  <div class="sidebar-footer">
+    <button class="logout-btn" onclick="logout()">
+      <i data-lucide="log-out"></i> Sign out
+    </button>
+  </div>
+</div>
 
     <div class="sidebar-footer">
       <button class="logout-btn" onclick="logout()"><i data-lucide="log-out"></i> Logout</button>
